@@ -3,23 +3,26 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
              http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-    version="2.0"> 
-       
-    <!-- MariaDB -->
-    <persistence-unit name="SynologiePU">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    version="2.0">
+ 
+    <!-- DB integration -->
+    <persistence-unit name="IntegrationPU" >
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>        
+        <class>de.schwerin.jpa.integration.TestCasesErrors</class>
+        <class>de.schwerin.jpa.integration.TestCases</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
-            <!--property name="hibernate.connection.url" value="jdbc:mysql://localhost/jpadb" /-->
-            <property name="hibernate.connection.url" value="jdbc:mysql://192.168.178.32:3307/jpa_test" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/integration?useSSL=false" />
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
             <property name="hibernate.connection.username" value="mathias" />
-            <property name="hibernate.connection.password" value="Allwardt$12" />
+            <property name="hibernate.connection.password" value="Allwardt99" />
             <property name="hibernate.archive.autodetection" value="class" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL55Dialect" />            
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />            
-            <property name="hibernate.hbm2ddl.auto" value="update" />            
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />            
         </properties>
-    </persistence-unit>    
- 
+    </persistence-unit>
+
+
 </persistence>

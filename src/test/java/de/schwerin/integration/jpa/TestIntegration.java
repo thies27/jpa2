@@ -1,5 +1,8 @@
 package de.schwerin.integration.jpa;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,17 +20,14 @@ public class TestIntegration {
 
 	final static Logger logger = Logger.getLogger(TestIntegration.class);
 
-	
-	
-	
 	@Test()
 	public void testPersistenzHandler() {
 				
-		DldTestCasesPersistenzHandler h = new DldTestCasesPersistenzHandler("update");
+		DldTestCasesPersistenzHandler h = new DldTestCasesPersistenzHandler("create-drop");
 		
 		h.persist(getPathToTestCasesFile());		
 		
-		Assert.assertTrue(h.numberOfTestCases() == 5);
+		Assert.assertTrue(h.numberOfTestCases() == 4);
 	}
 	
 	@Test()
@@ -45,8 +45,10 @@ public class TestIntegration {
 	@Test
 	public void createDataBaseEntrys() {
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("IntegrationPU");
-		EntityManager em = emf.createEntityManager();
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("SynologiePU");
+		Map<String, String> map = new HashMap<>();
+		map.put("hibernate.hbm2ddl.auto", "create-drop");
+		EntityManager em = emf.createEntityManager(map);
 
 		em.getTransaction().begin();
 		TableTestCases tc = new TableTestCases("gruppe", "klasse", "methode");

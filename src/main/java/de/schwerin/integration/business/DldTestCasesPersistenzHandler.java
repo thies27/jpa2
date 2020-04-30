@@ -33,7 +33,7 @@ public class DldTestCasesPersistenzHandler {
 		
 		Map<String, String> map = new HashMap<>();
 		map.put("hibernate.hbm2ddl.auto", hbm2ddl_auto);
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("IntegrationPU", map);
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("SynologiePU", map);
 		this.em = emf.createEntityManager();
 	}
 

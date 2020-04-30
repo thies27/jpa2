@@ -50,7 +50,7 @@ public class TableTestCases {
 	private String methode;
 	
 	@OneToMany(cascade = CascadeType.ALL)	
-	@JoinColumn(name = "testCaseId")
+	@JoinColumn(name = "TESTCASE_ID")
 	private Set<TableTestCasesErrors> errors;
 	
 	public String getGruppe() {
