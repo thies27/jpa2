@@ -1,4 +1,4 @@
-package de.schwerin.integration.data;
+package de.schwerin.integration.data.impl;
 
 import java.io.IOException;
 import java.nio.file.FileSystem;
@@ -10,16 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 import de.schwerin.integration.dao.IntegrationDao;
+import de.schwerin.integration.data.DataReader;
+import de.schwerin.integration.util.Constants;
 
 public class FileDataReader implements DataReader {
 
 	private String path;
 
-	private static final String GRUPPE = "gruppe";
-
-	private static final String KLASSE = "klasse";
-
-	private static final String METHODE = "methode";
+	
 
 	public FileDataReader(String path) {
 		super();
@@ -36,9 +34,9 @@ public class FileDataReader implements DataReader {
 			
 			liste.forEach(zeile -> {String[] strArr = zeile.split("\\.");
 			Map<String, String> map = new HashMap<>();
-				map.put(GRUPPE, strArr[0]);
-				map.put(KLASSE, strArr[1]);
-				map.put(METHODE, strArr[2]);
+				map.put(Constants.GRUPPE, strArr[0]);
+				map.put(Constants.KLASSE, strArr[1]);
+				map.put(Constants.METHODE, strArr[2]);
 				dao.getTestFälle().add(map);
 				
 			});			

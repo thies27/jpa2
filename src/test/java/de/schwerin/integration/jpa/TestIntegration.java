@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 import de.schwerin.integration.business.DldTestCasesPersistenzHandler;
 import de.schwerin.integration.dao.IntegrationDao;
 import de.schwerin.integration.data.DataReader;
-import de.schwerin.integration.data.FileDataReader;
+import de.schwerin.integration.data.impl.FileDataReader;
 import de.schwerin.integration.util.Hbm2ddl_Auto;
 
 public class TestIntegration {

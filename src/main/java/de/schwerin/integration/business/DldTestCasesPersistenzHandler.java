@@ -1,6 +1,5 @@
 package de.schwerin.integration.business;
 
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,19 +11,14 @@ import javax.persistence.Query;
 
 import de.schwerin.integration.dao.IntegrationDao;
 import de.schwerin.integration.data.DataReader;
-import de.schwerin.integration.data.FileDataReader;
+import de.schwerin.integration.data.impl.FileDataReader;
 import de.schwerin.integration.jpa.TableTestCases;
 import de.schwerin.integration.jpa.TableTestCasesErrors;
+import de.schwerin.integration.util.Constants;
 
-public class DldTestCasesPersistenzHandler {
+public class DldTestCasesPersistenzHandler {	
 
-	private static final String GRUPPE = "gruppe";
-
-	private static final String KLASSE = "klasse";
-
-	private static final String METHODE = "methode";
-
-	private static final Integer IS_NOT_EXIST = -1;
+	private static final Integer ID_NOT_EXIST = -1;
 
 	private EntityManager em;
 
@@ -32,7 +26,7 @@ public class DldTestCasesPersistenzHandler {
 		super();
 
 		Map<String, String> map = new HashMap<>();
-		map.put("hibernate.hbm2ddl.auto", hbm2ddl_auto);
+		map.put(Constants.HBM2DDL_AUTO, hbm2ddl_auto);
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("SynologiePU", map);
 		this.em = emf.createEntityManager();
 	}
@@ -49,9 +43,9 @@ public class DldTestCasesPersistenzHandler {
 		for (Map<String, String> map : dao.getTestFälle()) {
 
 			Integer id = existInDatabase(map);
-			if (id == IS_NOT_EXIST) {
+			if (id == ID_NOT_EXIST) {
 
-				TableTestCases tc = new TableTestCases(map.get(GRUPPE), map.get(KLASSE), map.get(METHODE));
+				TableTestCases tc = new TableTestCases(map.get(Constants.GRUPPE), map.get(Constants.KLASSE), map.get(Constants.METHODE));
 				em.persist(tc);
 
 				TableTestCasesErrors errors = new TableTestCasesErrors(tc.getId());
@@ -70,14 +64,14 @@ public class DldTestCasesPersistenzHandler {
 	private Integer existInDatabase(Map<String, String> map) {
 
 		Query q = em.createNamedQuery("TableTestCases.FindIdByGroup");
-		q.setParameter(GRUPPE, map.get(GRUPPE));
-		q.setParameter(KLASSE, map.get(KLASSE));
-		q.setParameter(METHODE, map.get(METHODE));
+		q.setParameter(Constants.GRUPPE, map.get(Constants.GRUPPE));
+		q.setParameter(Constants.KLASSE, map.get(Constants.KLASSE));
+		q.setParameter(Constants.METHODE, map.get(Constants.METHODE));
 		TableTestCases table;
 		try {
 			table = (TableTestCases) q.getSingleResult();
 		} catch (NoResultException e) {
-			return IS_NOT_EXIST;
+			return ID_NOT_EXIST;
 		}
 
 		return table.getId();
