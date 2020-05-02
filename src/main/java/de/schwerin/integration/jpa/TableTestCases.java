@@ -18,7 +18,8 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "dld_testcases", schema = "integration", uniqueConstraints=@UniqueConstraint(columnNames = {"GRUPPE", "KLASSE", "METHODE"}))
 @NamedQueries({@NamedQuery(name="TableTestCases.FindIdByGroup", query="select tc from TableTestCases tc "
-		+ "where gruppe = :gruppe and klasse = :klasse and methode = :methode"), @NamedQuery(name="TableTestCases.SelectCount", query="select count(tc) from TableTestCases tc")})
+		+ "where gruppe = :gruppe and klasse = :klasse and methode = :methode"), 
+	@NamedQuery(name="TableTestCases.SelectCount", query="select count(tc) from TableTestCases tc")})
 public class TableTestCases {
 	
 	public static final String FIND_BY_GROUP = "TableTestCases.FindIdByGroup"; 
@@ -35,9 +36,7 @@ public class TableTestCases {
 		this.gruppe = gruppe;
 		this.klasse = klasse;
 		this.methode = methode;
-	}
-	
-	
+	}	
 
 	@Id
 	@Column(name = "ID")	
