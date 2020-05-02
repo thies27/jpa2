@@ -15,9 +15,7 @@ import de.schwerin.integration.util.Constants;
 
 public class FileDataReader implements DataReader {
 
-	private String path;
-
-	
+	private String path;	
 
 	public FileDataReader(String path) {
 		super();
