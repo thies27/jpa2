@@ -17,20 +17,20 @@ import de.schwerin.integration.jpa.TableTestCases;
 import de.schwerin.integration.jpa.TableTestCasesErrors;
 
 public class DldTestCasesPersistenzHandler {
-	
+
 	private static final String GRUPPE = "gruppe";
 
 	private static final String KLASSE = "klasse";
 
 	private static final String METHODE = "methode";
-	
+
 	private static final Integer IS_NOT_EXIST = -1;
 
 	private EntityManager em;
 
 	public DldTestCasesPersistenzHandler(String hbm2ddl_auto) {
 		super();
-		
+
 		Map<String, String> map = new HashMap<>();
 		map.put("hibernate.hbm2ddl.auto", hbm2ddl_auto);
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("SynologiePU", map);
@@ -38,6 +38,8 @@ public class DldTestCasesPersistenzHandler {
 	}
 
 	public void persist(String path) {
+		
+		System.out.println(numberOfRecords("TableTestCases.SelectCount"));
 
 		DataReader reader = new FileDataReader(path);
 		IntegrationDao dao = reader.readData(new IntegrationDao());
@@ -49,21 +51,19 @@ public class DldTestCasesPersistenzHandler {
 			Integer id = existInDatabase(map);
 			if (id == IS_NOT_EXIST) {
 
-				TableTestCases tc = new TableTestCases(map.get(GRUPPE), 
-						map.get(KLASSE), 
-						map.get(METHODE));
+				TableTestCases tc = new TableTestCases(map.get(GRUPPE), map.get(KLASSE), map.get(METHODE));
 				em.persist(tc);
-				
+
 				TableTestCasesErrors errors = new TableTestCasesErrors(tc.getId());
 				em.persist(errors);
-			
+
 			} else {
-				
+
 				TableTestCasesErrors errors = new TableTestCasesErrors(id);
 				em.persist(errors);
 			}
 		}
-		
+
 		em.getTransaction().commit();
 	}
 
@@ -82,14 +82,14 @@ public class DldTestCasesPersistenzHandler {
 
 		return table.getId();
 	}
-	
-	public int numberOfTestCases() {
-		
-		Query q = em.createNativeQuery("Select count(*) from dld_testcases");
-		
-		BigInteger anzahl = (BigInteger) q.getSingleResult();
-		
-		return anzahl.intValue();
+
+	public Long numberOfRecords(String queryName) {
+
+		Query q = em.createNamedQuery(queryName);
+
+		Long anzahl = (Long) q.getSingleResult();
+
+		return anzahl;
 	}
 
 }

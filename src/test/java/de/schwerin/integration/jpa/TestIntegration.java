@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.apache.log4j.Logger;
 import org.testng.Assert;
@@ -15,19 +16,21 @@ import de.schwerin.integration.business.DldTestCasesPersistenzHandler;
 import de.schwerin.integration.dao.IntegrationDao;
 import de.schwerin.integration.data.DataReader;
 import de.schwerin.integration.data.FileDataReader;
+import de.schwerin.integration.util.Hbm2ddl_Auto;
 
 public class TestIntegration {
 
-	final static Logger logger = Logger.getLogger(TestIntegration.class);
+	final static Logger logger = Logger.getLogger(TestIntegration.class);	
+	
 
 	@Test()
 	public void testPersistenzHandler() {
 				
-		DldTestCasesPersistenzHandler h = new DldTestCasesPersistenzHandler("create-drop");
+		DldTestCasesPersistenzHandler h = new DldTestCasesPersistenzHandler(Hbm2ddl_Auto.UPDATE.getValue());
 		
 		h.persist(getPathToTestCasesFile());		
 		
-		Assert.assertTrue(h.numberOfTestCases() == 4);
+		Assert.assertTrue(h.numberOfRecords(TableTestCases.FIND_BY_GROUP) == 14);
 	}
 	
 	@Test()
@@ -43,27 +46,22 @@ public class TestIntegration {
 	}
 
 	@Test
-	public void createDataBaseEntrys() {
+	public void testCountDataBaseEntrys() {
 		
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("SynologiePU");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("IntegrationPU");
 		Map<String, String> map = new HashMap<>();
-		map.put("hibernate.hbm2ddl.auto", "create-drop");
+		map.put("hibernate.hbm2ddl.auto", Hbm2ddl_Auto.UPDATE.getValue());
 		EntityManager em = emf.createEntityManager(map);
 
-		em.getTransaction().begin();
-		TableTestCases tc = new TableTestCases("gruppe", "klasse", "methode");
-		em.persist(tc);
-
-		TableTestCasesErrors errors = new TableTestCasesErrors(tc.getId());
-		em.persist(errors);
-
-		em.getTransaction().commit();
-
-		TableTestCasesErrors e2 = em.find(TableTestCasesErrors.class, errors.getId());
-
-		Assert.assertTrue(tc.getId() == e2.getTestCaseId(), "Die ID aus TestCases mit testCaseId übereinstimmen.  ");
-
-		Assert.assertNotNull(e2.getExecuteDate(), "Das Datum darf nicht leer sein.  ");
+		Query q = em.createNamedQuery(TableTestCases.SELECT_COUNT);
+		Long r = (Long) q.getSingleResult();
+		Assert.assertNotNull(r);
+		Assert.assertTrue(r == 5);
+		
+		Query q1 = em.createNamedQuery(TableTestCasesErrors.SELECT_COUNT);
+		Long r1 = (Long) q1.getSingleResult();
+		Assert.assertNotNull(r1);
+		Assert.assertTrue(r1 == 17);
 
 	}
 	
