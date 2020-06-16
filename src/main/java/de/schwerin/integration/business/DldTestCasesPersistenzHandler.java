@@ -33,8 +33,6 @@ public class DldTestCasesPersistenzHandler {
 
 	public void persist(String path) {
 		
-		System.out.println(numberOfRecords("TableTestCases.SelectCount"));
-
 		DataReader reader = new FileDataReader(path);
 		IntegrationDao dao = reader.readData(new IntegrationDao());
 
